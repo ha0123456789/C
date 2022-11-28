@@ -10,7 +10,7 @@ void add(node **last)
 	while(1)
 	{
 		int people;
-		printf("输入要录入的人数：");
+		printf("输入要录入的人数："); 
 		scanf("%d",&people);
 		sumpeople+=people;
 		for(i=0;i<people;i++)
@@ -329,7 +329,7 @@ void namesort(node *head)
 					for(q=p,max=q;q!=NULL;q=q->next)
 						if(strcmp(max->name,q->name)<0)max=q;
 					node *temp=(node*)malloc(sizeof(node));
-					if(strcmp(max->name,p->name))
+					if(strcmp(max->name,p->name)>0)
 					{	
 						strcpy(temp->num,max->num);strcpy(max->num,p->num);strcpy(p->num,temp->num);
 						strcpy(temp->name,max->name);strcpy(max->name,p->name);strcpy(p->name,temp->name);
@@ -346,7 +346,7 @@ void namesort(node *head)
 							for(q=p,min=q;q!=NULL;q=q->next)
 								if(strcmp(min->name,q->name)>0)min=q;
 							node *temp=(node*)malloc(sizeof(node));
-							if(strcmp(min->name,p->name))
+							if(strcmp(min->name,p->name)<0)
 							{	
 								strcpy(temp->num,min->num);strcpy(min->num,p->num);strcpy(p->num,temp->num);
 								strcpy(temp->name,min->name);strcpy(min->name,p->name);strcpy(p->name,temp->name);
@@ -508,24 +508,39 @@ void read(node *head,node **last)
 	if(!fp)printf("打开失败\n"); 
 	else{
 		if(sumpeople==0)
+		{
 			fscanf(fp,"%d",&sumpeople);
-		else{
+			for(i=0;i<sumpeople;i++)
+			{
+				node *p1=(node*)malloc(sizeof(node));
+				(*last)->next=p1;
+				p1->next=NULL;
+				*last=p1;
+			}
+			node *p=head->next;
+			while(p)
+			{
+				fscanf(fp,"%s%s%s%lf",p->num,p->name,p->gender,&p->grade);
+				p=p->next;
+			}
+		}else{
 			int temp;
 			fscanf(fp,"%d",&temp);
+			node *storelast=*last;
+			for(i=0;i<temp;i++)
+			{
+				node *p1=(node*)malloc(sizeof(node));
+				(*last)->next=p1;
+				p1->next=NULL;
+				*last=p1;
+			}
+			node *p=storelast->next;
+			while(p)
+			{
+				fscanf(fp,"%s%s%s%lf",p->num,p->name,p->gender,&p->grade);
+				p=p->next;
+			}
 			sumpeople+=temp;
-		}
-		for(i=0;i<sumpeople;i++)
-		{
-			node *p1=(node*)malloc(sizeof(node));
-			(*last)->next=p1;
-			p1->next=NULL;
-			*last=p1;
-		}
-		node *p=head->next;
-		while(p)
-		{
-			fscanf(fp,"%s%s%s%lf",p->num,p->name,p->gender,&p->grade);
-			p=p->next;
 		}
 		printf("读入成功\n");
 		fp=NULL;
