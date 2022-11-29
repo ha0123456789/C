@@ -12,7 +12,7 @@ int main()
     node *end=head;
     head->prior=NULL;
     printf("输入要录入的个数：");
-    int num,wei,count=1;
+    int num,wei,swei,count=1;
     scanf("%d",&num);
     for(;num>0;num--)
     {
@@ -24,9 +24,25 @@ int main()
         printf("输入数据：");
         scanf("%d",&p->data);
     }
+    printf("输入要删除的位数：");
+    scanf("%d",&swei);
+    node *p=head->next;
+    while(p)
+    {
+        if(swei==count)  
+        {
+            p->prior->next=p->next;
+            p->next->prior=p->prior;
+            free(p);
+            break;
+        }
+        p=p->next;
+        count++;
+    }
     printf("输入要查找的位数：");
     scanf("%d",&wei);
-    node *p=head->next;
+    p=head->next;
+    count=1;
     while(p)
     {
         if(wei==count)  
